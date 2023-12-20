@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:node_tutorial/model/product_model.dart';
 import 'package:node_tutorial/service/api_services.dart';
 import 'widget.dart';
 
-class CreateScreen extends StatefulWidget {
-  const CreateScreen({Key? key}) : super(key: key);
+class EditScreen extends StatefulWidget {
+  final ProductModel data;
+  const EditScreen({super.key, required this.data});
 
   @override
-  State<CreateScreen> createState() => _CreateScreenState();
+  State<EditScreen> createState() => _EditScreenState();
 }
 
-class _CreateScreenState extends State<CreateScreen> {
+class _EditScreenState extends State<EditScreen> {
   bool _loading = false;
 
   TextEditingController tfcname = TextEditingController();
@@ -17,9 +19,17 @@ class _CreateScreenState extends State<CreateScreen> {
   TextEditingController tfcdesc = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    tfcname.text = widget.data.name.toString();
+    tfcprice.text = widget.data.price.toString();
+    tfcdesc.text = widget.data.description.toString();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Operation")),
+      appBar: AppBar(title: const Text("Edit Operation")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
         child: Column(
@@ -34,25 +44,22 @@ class _CreateScreenState extends State<CreateScreen> {
                 ? const CircularProgressIndicator()
                 : InkWell(
                     onTap: () async {
-                      if (tfcname.text.isEmpty || tfcprice.text.isEmpty || tfcdesc.text.isEmpty) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(backgroundColor: Colors.red, content: Text("Please enter your product details!")));
-                      } else {
-                        setState(() {
-                          _loading = true;
-                        });
-                        var data = {
+                      setState(() {
+                        _loading = true;
+                      });
+                      await Api.updateProduct(
+                        widget.data.id,
+                        {
                           "productName": tfcname.text,
                           "productPrice": tfcprice.text,
                           "productDescription": tfcdesc.text,
-                        };
-                        await Api.addProduct(data);
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(backgroundColor: Colors.green, content: Text("Your product added!")));
-                        setState(() {
-                          _loading = false;
-                        });
-                      }
+                          "id": widget.data.id,
+                        },
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(backgroundColor: Colors.green, content: Text("Your product added!")));
+                      setState(() {
+                        _loading = false;
+                      });
                     },
                     child: Container(
                       height: 55,
@@ -65,7 +72,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         ),
                       ),
                     ),
-                  ),
+                  )
           ],
         ),
       ),

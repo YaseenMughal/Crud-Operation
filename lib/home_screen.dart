@@ -1,7 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:node_tutorial/create_screen.dart';
+import 'package:node_tutorial/delete_screen.dart';
 import 'package:node_tutorial/read_screen.dart';
+import 'package:node_tutorial/update_screen.dart';
+import 'widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Crud Operation"), centerTitle: true),
+      appBar: AppBar(title: const Text("Crud Operation"), centerTitle: true),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,22 +24,22 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             button(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CreateScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateScreen()));
                 },
                 text: "Create"),
             button(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReadScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ReadScreen()));
                 },
                 text: "Read"),
             button(
                 onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Screen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdateScreen()));
                 },
                 text: "Update"),
             button(
                 onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Screen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DeleteScreen()));
                 },
                 text: "Delete"),
           ],
@@ -45,11 +47,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-}
-
-button({required void Function()? onTap, required String text}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 6.0),
-    child: ElevatedButton(onPressed: onTap, child: Text(text, style: TextStyle(fontSize: 20))),
-  );
 }
